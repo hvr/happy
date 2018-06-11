@@ -8,25 +8,37 @@ environment:
     LIBRARY_PATH: "c:/msys64/mingw64/lib;c:/msys64/mingw64/bin"
     APPVEYOR_SAVE_CACHE_ON_ERROR: true
   matrix:
+    # 32-bit
     - GHCVER: "8.4.3"
+      CHOCOPTS: --forcex86
+    # 64-bit
+    - GHCVER: "8.4.3"
+      CHOCOPTS:
+
     - GHCVER: "8.2.2"
+      CHOCOPTS:
     - GHCVER: "8.0.2"
+      CHOCOPTS:
     - GHCVER: "7.10.3.2"
+      CHOCOPTS:
     - GHCVER: "7.8.4.1"
+      CHOCOPTS:
     - GHCVER: "7.6.3.1"
+      CHOCOPTS:
 
 cache:
  - "c:/SR"
 
 install:
- - "choco install -y cabal"
- - "choco install -y ghc --version %GHCVER%"
+ - "choco install -y cabal %CHOCOPTS%"
+ - "choco install -y ghc --version %GHCVER% %CHOCOPTS%"
  - "refreshenv"
  - "set PATH=C:\\msys64\\mingw64\\bin;C:\\msys64\\usr\\bin;%PATH%;C:\\ghc\\ghc-%GHCVERSION%\\bin;C:\\hsbin"
  - "cabal --version"
  - "ghc --version"
  - "cabal %CABOPTS% update -vverbose+nowrap"
- - "cabal %CABOPTS% install alex happy --bindir=/hsbin"
+ - "cabal %CABOPTS% install -j1 alex --bindir=/hsbin"
+ - "cabal %CABOPTS% install -j1 -v3 happy --bindir=/hsbin"
  - "alex --version"
  - "happy --version"
 
