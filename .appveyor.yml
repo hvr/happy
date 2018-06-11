@@ -38,7 +38,9 @@ install:
  - "ghc --version"
  - "cabal %CABOPTS% update -vverbose+nowrap"
  - "cabal %CABOPTS% install -j1 alex --bindir=/hsbin"
+ - "set RTSOPTS=--generate-crash-dump"
  - "cabal %CABOPTS% install -j1 -v3 happy --bindir=/hsbin"
+ - "set RTSOPTS="
  - "alex --version"
  - "happy --version"
 
